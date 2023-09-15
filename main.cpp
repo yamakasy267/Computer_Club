@@ -20,6 +20,7 @@ private:
         if (!input_file.is_open())
         {
             cout<<"Could not open the file"<<endl;
+            exit(1);
         }
         input_file >> line;
         try
@@ -43,6 +44,8 @@ private:
         input_file >> line;
         if(!IsCorectTime(line)){
             cout<<line;
+            input_file >> line;
+            cout<<" "<<line;
             input_file.close();
             exit(1);
         }
@@ -52,7 +55,7 @@ private:
 
         input_file >> line;
         if(!IsCorectTime(line)){
-            cout<<line;
+            cout<<input_data[0]<<" "<<line;
             input_file.close();
             exit(1);
         }
@@ -105,6 +108,8 @@ private:
                 try
                 {
                     number_of_table = atoi(line.substr(index_space+1,1).c_str());
+                    if(index_space<8)
+                        throw 1;
                 }
                 catch(...)
                 {
@@ -255,16 +260,22 @@ private:
         
         if(!clients_in_club.empty())
         {
-            sort(begin(clients_in_club), end(clients_in_club));
+            
             for (vector<string>::iterator client = clients_in_club.begin(); client!=clients_in_club.end();++client)
             {
                 if (*client == "")
                     continue;
-                cout<<input_data[1]<< " 11 " << *client<<endl;
                 time_the_table[client - begin(clients_in_club)] += close_club;
                 profit_table[client-begin(clients_in_club)] += close_club;
                     if (profit_table[client-begin(clients_in_club)]%60 != 0)
                         profit_table[client-begin(clients_in_club)] += 60-abs(profit_table[client-begin(clients_in_club)]%60);
+            }
+            sort(begin(clients_in_club), end(clients_in_club));
+            for (auto client: clients_in_club)
+            {
+                if (client == "")
+                    continue;
+                cout<<input_data[1]<< " 11 " << client<<endl;
             }
         }
         if(!queue.empty())
@@ -326,9 +337,8 @@ public:
 
 };
 
-int main(int argc, char** argvs)
+int main(int argc, char* argv[])
 {
-
-    ManagerComputerClub manager(argvs[1]);
+    ManagerComputerClub manager(argv[1]);
     return 0;
 }
